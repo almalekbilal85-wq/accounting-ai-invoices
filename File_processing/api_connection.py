@@ -64,14 +64,20 @@ instructions_dic = {
     }
 }
 
-
-def getAIOutput(file, file_type):
+def getTextFromFile(file, file_type):
     invoice_text = ''
 
     if file_type == 'jpeg' or file_type == 'png':
         invoice_text = getOCRtext(file)
     else:
         invoice_text = readPdfText(file)
+
+    return invoice_text
+    
+
+def getAIOutput(file, file_type):
+
+    invoice_text = getTextFromFile(file, file_type)
 
     user_text = "Here is an OCR-extracted invoice. Process it according to the rules." \
     "--- INVOICE START --- " + invoice_text + "--- INVOICE END ---"
