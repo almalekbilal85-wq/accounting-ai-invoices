@@ -1,0 +1,18 @@
+
+{% extends "invoices_app/base.html" %}
+
+  {% block body_block %}
+<div class="container my-5">
+  <div class="p-5 text-center text-white rounded-4 shadow"
+       style="background: linear-gradient(135deg, #002aff, #8000ff);">
+
+    <h1 class="display-3 fw-bold">Välkommen till ALMALEK Bokföring</h1>
+    <p class="lead">Vi hjälper dig med bokföring och deklaration och allt sånt</p>
+
+    <div class="mt-4">
+      <a href="{% url 'invoices_app:upload' %}" class="btn btn-light btn-lg px-4 me-2">Ladda upp faktura</a>
+      <a href="#" class="btn btn-outline-light btn-lg px-4">Om oss</a>
+    </div>
+  </div>
+</div>
+   {% endblock %}

@@ -1,0 +1,86 @@
+
+{% extends "invoices_app/base.html" %}
+
+  {% block body_block %}
+<div class="container my-5">
+  <div class="p-5 text-center text-white rounded-4 shadow"
+       style="background: linear-gradient(135deg, #002aff, #8000ff);">
+
+    <h1 class="display-3 fw-bold">Här kan du ladda upp fakturor</h1>
+    <p class="lead">Du kan ladda upp fakturor och vi extraherar data från dem</p>
+
+  </div>
+</div>
+
+    <form method="POST" enctype="multipart/form-data">
+
+        {{ form.as_p }}
+        {% csrf_token %}
+        <input type="submit" class="btn btn-primary" value="Ladda upp">
+
+    </form>
+
+    <h1>{{text}}</h1>
+
+    {% if data %}
+    <div class="container mt-5">
+  <div class="card shadow rounded-4">
+    <div class="card-body">
+      
+      <h3 class="mb-4">Invoice Details</h3>
+
+      <!-- Basic info -->
+      <div class="row mb-3">
+        <div class="col-md-4">
+          <strong>Invoice Number:</strong>
+          <p>{{ data.invoice_number }}</p>
+        </div>
+        <div class="col-md-4">
+          <strong>Date:</strong>
+          <p>{{ data.invoice_date }}</p>
+        </div>
+        <div class="col-md-4">
+          <strong>Total Amount:</strong>
+          <p>{{ data.total_amount }} kr</p>
+        </div>
+      </div>
+
+      <div class="row mb-4">
+        <div class="col-md-4">
+          <strong>VAT Amount:</strong>
+          <p>{{ data.vat_amount }} kr</p>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <h5 class="mb-3">Accounting Entries</h5>
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+          <thead class="table-dark">
+            <tr>
+              <th>Account</th>
+              <th>Debit</th>
+              <th>Credit</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for entry in data.accounting_entries %}
+            <tr>
+              <td>{{ entry.account }}</td>
+              <td>{{ entry.debit }}</td>
+              <td>{{ entry.credit }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% else %}
+  <div class="alert alert-warning">
+    No invoice data available.
+  </div>
+{% endif %}
+   {% endblock %}
