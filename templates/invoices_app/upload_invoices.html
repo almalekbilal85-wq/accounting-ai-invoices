@@ -22,11 +22,11 @@
 
     <h1>{{text}}</h1>
 
-    {% if data %}
-    <div class="container mt-5">
+   {% if data %}
+<div class="container mt-5">
   <div class="card shadow rounded-4">
     <div class="card-body">
-      
+
       <h3 class="mb-4">Invoice Details</h3>
 
       <!-- Basic info -->
@@ -35,17 +35,33 @@
           <strong>Invoice Number:</strong>
           <p>{{ data.invoice_number }}</p>
         </div>
+
         <div class="col-md-4">
           <strong>Date:</strong>
           <p>{{ data.invoice_date }}</p>
         </div>
+
+        <div class="col-md-4">
+          <strong>Supplier:</strong>
+          <p>{{ data.supplier_name }}</p>
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div class="row mb-3">
+        <div class="col-md-12">
+          <strong>Description:</strong>
+          <p>{{ data.description }}</p>
+        </div>
+      </div>
+
+      <!-- Amounts -->
+      <div class="row mb-3">
         <div class="col-md-4">
           <strong>Total Amount:</strong>
           <p>{{ data.total_amount }} kr</p>
         </div>
-      </div>
 
-      <div class="row mb-4">
         <div class="col-md-4">
           <strong>VAT Amount:</strong>
           <p>{{ data.vat_amount }} kr</p>
@@ -54,6 +70,7 @@
 
       <!-- Table -->
       <h5 class="mb-3">Accounting Entries</h5>
+
       <div class="table-responsive">
         <table class="table table-bordered table-striped">
           <thead class="table-dark">

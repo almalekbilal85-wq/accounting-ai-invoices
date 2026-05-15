@@ -22,9 +22,9 @@ system = "You are an accounting assistant specialized in Swedish bookkeeping usi
 "- If information is missing or unclear, make a reasonable assumption but stay consistent." \
 "- Do not invent extreme values or unrealistic data." \
 "Behavior:" \
-"- Extract: invoice number, dates, amounts, VAT, supplier." \
+"- Extract: invoice number, dates, supplier name, invoice description, amounts, VAT." \
 "- Classify the expense type." \
-"- Generate correct accounting entries." 
+"- Generate correct accounting entries."
 
 instructions_dic = {
     "format": {
@@ -37,8 +37,13 @@ instructions_dic = {
             "properties": {
                 "invoice_number": {"type": "string"},
                 "invoice_date": {"type": "string"},
+
+                "supplier_name": {"type": "string"},
+                "description": {"type": "string"},
+
                 "total_amount": {"type": "number"},
                 "vat_amount": {"type": "number"},
+
                 "accounting_entries": {
                     "type": "array",
                     "items": {
@@ -56,6 +61,8 @@ instructions_dic = {
             "required": [
                 "invoice_number",
                 "invoice_date",
+                "supplier_name",
+                "description",
                 "total_amount",
                 "vat_amount",
                 "accounting_entries"
