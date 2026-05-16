@@ -1,30 +1,36 @@
 from django.db import models
+from django.urls import reverse
 
 # Create your models here.
 
 class Customer(models.Model):
     name = models.CharField(max_length=256)
     org_number = models.CharField(max_length=256)
-    address = models.CharField(max_length=256)
+    address = models.CharField(max_length=256, blank=True, null=True)
     
 
     def __str__(self):
         return self.name
+    
+    def get_absolute_url(self):
+        return reverse("invoices_app:customer_detail", kwargs={"pk": self.pk})
 
 class Invoice(models.Model):
     customer = models.ForeignKey(Customer, related_name='invoices', on_delete=models.CASCADE)
-    invoice_number = models.CharField(max_length=256)
-    invoice_date = models.DateField()
-    due_date = models.DateField()
-    total_amount = models.DecimalField(max_digits=12, decimal_places=2)
-    vat_amount = models.DecimalField(max_digits=12, decimal_places=2)
-    currency = models.CharField(max_length=3,default="SEK")
-    created_at = models.DateTimeField(auto_now_add=True)
-    supplier = models.CharField(max_length=256)
-    description = models.TextField()
+    invoice_number = models.CharField(max_length=256, blank=True, null=True)
+    invoice_date = models.DateField(blank=True, null=True)
+    due_date = models.DateField(blank=True, null=True)
+    total_amount = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
+    vat_amount = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
+    currency = models.CharField(max_length=3,default="SEK", blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    supplier = models.CharField(max_length=256, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
 
     file = models.FileField(
-        upload_to="invoices/"
+        upload_to="invoices/",
+        blank=True,
+         null=True
     )
 
     def __str__(self):

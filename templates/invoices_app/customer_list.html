@@ -1,0 +1,67 @@
+
+{% extends "invoices_app/base.html" %}
+
+{% block body_block %}
+
+<div class="container mt-5">
+
+    <div class="card shadow rounded-4">
+        <div class="card-body">
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="mb-0">Kunder</h2>
+
+                <!-- Optional Add Button -->
+                
+                <a href="{% url 'invoices_app:create_customer' %}" class="btn btn-primary">
+                    Ny kund
+                </a>
+                
+            </div>
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+                    <thead class="table-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Namn</th>
+                            <th>Organization Number</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for customer in customer_list %}
+                        <tr style="cursor:pointer;" onclick="window.location='{% url 'invoices_app:customer_detail' customer.pk %}'">
+                            <td>{{ forloop.counter }}</td>
+
+                            <td>
+                                <strong>{{ customer.name }}</strong>
+                            </td>
+
+                            <td>
+                                {{ customer.org_number }}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="3" class="text-center text-muted">
+                                No customers found.
+                            </td>
+                        </tr>
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
