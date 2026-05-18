@@ -1,0 +1,332 @@
+
+{% extends "invoices_app/base.html" %}
+{% block body_block %}
+
+<div class="container-fluid mt-4">
+
+    <form method="POST" enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        <div class="row g-4">
+
+            <!-- ================================= -->
+            <!-- LEFT SIDE -->
+            <!-- ================================= -->
+
+            <div class="col-lg-4">
+
+                <!-- Journal Card -->
+                <div class="card shadow border-0 rounded-4 mb-4">
+
+                    <div class="card-body">
+
+                        <h4 class="mb-4">
+                            Journal
+                        </h4>
+
+                        {% for field in journal_form %}
+
+                            <div class="mb-3">
+
+                                <label class="form-label fw-semibold">
+                                    {{ field.label }}
+                                </label>
+
+                                {{ field }}
+
+                                {% if field.errors %}
+                                    <div class="text-danger small">
+                                        {{ field.errors }}
+                                    </div>
+                                {% endif %}
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+                <!-- Invoice Card -->
+                <div id="invoice-section" style="display:none;">
+
+                    <div class="card shadow border-0 rounded-4">
+
+                        <div class="card-body">
+
+                            <h4 class="mb-4">
+                                Invoice
+                            </h4>
+
+                            <div class="row">
+                    {% for field in invoice_form %}
+
+                        <div class="col-12 mb-3">
+
+                            <label class="form-label fw-semibold">
+                                {{ field.label }}
+                            </label>
+
+                            {{ field }}
+
+                            {% if field.errors %}
+                                <div class="text-danger small">
+                                    {{ field.errors }}
+                                </div>
+                            {% endif %}
+
+
+                        </div>
+
+                    {% endfor %}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- ================================= -->
+            <!-- RIGHT SIDE -->
+            <!-- ================================= -->
+
+            <div class="col-lg-8">
+
+                <div class="card shadow border-0 rounded-4 h-100">
+
+                    <div class="card-body d-flex flex-column">
+
+                        <!-- Header -->
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+
+                            <div>
+
+                                <h4 class="mb-1">
+                                    Accounting Lines
+                                </h4>
+
+                                <p class="text-muted mb-0">
+                                    Debit and credit entries
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        {{ formset.management_form }}
+
+                        <!-- Table -->
+                        <div class="table-responsive flex-grow-1">
+
+                            <table class="table table-bordered align-middle">
+
+                                <thead class="table-dark">
+
+                                    <tr>
+                                        <th style="width: 35%;">
+                                            Account
+                                        </th>
+
+                                        <th style="width: 25%;">
+                                            Debit
+                                        </th>
+
+                                        <th style="width: 25%;">
+                                            Credit
+                                        </th>
+
+                                        {% if formset.can_delete %}
+                                            <th style="width: 15%;">
+                                                Delete
+                                            </th>
+                                        {% endif %}
+                                    </tr>
+
+                                </thead>
+
+                                <tbody>
+
+                                    {% for form in formset %}
+
+                                        <tr>
+
+                                            {% for hidden in form.hidden_fields %}
+                                                {{ hidden }}
+                                            {% endfor %}
+
+                                            <td>
+                                                {{ form.account_number }}
+
+                                                {% if form.account_number.errors %}
+                                                    <div class="text-danger small">
+                                                        {{ form.account_number.errors }}
+                                                    </div>
+                                                {% endif %}
+                                            </td>
+
+                                            <td>
+                                                {{ form.debit }}
+
+                                                {% if form.debit.errors %}
+                                                    <div class="text-danger small">
+                                                        {{ form.debit.errors }}
+                                                    </div>
+                                                {% endif %}
+                                            </td>
+
+                                            <td>
+                                                {{ form.credit }}
+
+                                                {% if form.credit.errors %}
+                                                    <div class="text-danger small">
+                                                        {{ form.credit.errors }}
+                                                    </div>
+                                                {% endif %}
+                                            </td>
+
+                                            {% if formset.can_delete %}
+                                                <td class="text-center">
+                                                    {{ form.DELETE }}
+                                                </td>
+                                            {% endif %}
+
+                                        </tr>
+
+                                    {% endfor %}
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                        <!-- Invoice Preview Area -->
+                        <div class="mt-4">
+
+                            <h5 class="mb-3">Invoice Preview</h5>
+
+                            <!-- Image Preview -->
+                            <img id="invoice-preview"
+                                class="img-fluid rounded shadow border"
+                                style="width:100%; max-height:650px; object-fit:contain; display:none;">
+
+                            <!-- PDF Preview -->
+                            <iframe id="pdf-preview"
+                                    class="rounded shadow border"
+                                    style="width:100%; height:650px; display:none;">
+                            </iframe>
+
+                        </div>
+                        <!-- Buttons -->
+                        <div class="d-flex justify-content-end gap-2 mt-4">
+
+                            <a href="{% url 'invoices_app:customers_list' %}"
+                               class="btn btn-outline-secondary">
+                                Cancel
+                            </a>
+
+                            <button type="submit"
+                                    class="btn btn-success px-4">
+                                Save Journal
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+<!-- ================================= -->
+<!-- Toggle Invoice Form -->
+<!-- ================================= -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const journalType = document.getElementById("id_type");
+
+    const invoiceSection = document.getElementById("invoice-section");
+
+    function toggleInvoiceSection() {
+
+        if (journalType.value === "invoice") {
+
+            invoiceSection.style.display = "block";
+
+        } else {
+
+            invoiceSection.style.display = "none";
+
+        }
+
+    }
+
+    journalType.addEventListener("change", toggleInvoiceSection);
+
+    toggleInvoiceSection();
+
+});
+
+</script>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const fileInput = document.getElementById("id_file");
+
+    const imagePreview = document.getElementById("invoice-preview");
+
+    const pdfPreview = document.getElementById("pdf-preview");
+
+    if (!fileInput) return;
+
+    fileInput.addEventListener("change", function () {
+
+        const file = this.files[0];
+
+        if (!file) return;
+
+        const fileURL = URL.createObjectURL(file);
+
+        // Reset both
+        imagePreview.style.display = "none";
+        pdfPreview.style.display = "none";
+
+        // IMAGE
+        if (file.type.startsWith("image/")) {
+
+            imagePreview.src = fileURL;
+            imagePreview.style.display = "block";
+
+        }
+
+        // PDF
+        else if (file.type === "application/pdf") {
+
+            pdfPreview.src = fileURL;
+            pdfPreview.style.display = "block";
+
+        }
+
+    });
+
+});
+
+</script>
+{% endblock %}

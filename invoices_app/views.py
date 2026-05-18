@@ -1,12 +1,13 @@
-from django.shortcuts import render
-from .forms import UploadFileForm
+from django.shortcuts import render, redirect, get_object_or_404
+from .forms import UploadFileForm, JournalForm, AccountingLineForm, InvoiceForm, AccountingLineFormSet
 from File_processing.api_connection import getAIOutput
 import json
 
 from django.views.generic import View, ListView, DetailView, CreateView, DeleteView, UpdateView
 from invoices_app import models
-
 from django.urls import reverse_lazy
+
+
 # Create your views here.
 
 def index(request):
@@ -43,7 +44,43 @@ def upload(request):
 
 
 
+def create_journal(request, customer_id):
+    customer = models.Customer.objects.get(id=customer_id)
 
+    if request.method == "POST":
+
+        journal_form = JournalForm(request.POST)
+        formset = AccountingLineFormSet(request.POST)
+        invoice_form = InvoiceForm(request.POST, request.FILES)
+
+        if journal_form.is_valid() and formset.is_valid():
+
+            journal = journal_form.save(commit=False)
+            journal.customer = customer
+            journal.save()
+
+            formset.instance = journal
+            formset.save()
+
+            # ONLY SAVE INVOICE IF TYPE IS INVOICE
+            if journal.type == "invoice" and invoice_form.is_valid():
+                invoice = invoice_form.save(commit=False)
+                invoice.journal = journal
+                invoice.save()
+
+            return redirect("invoices_app:customer_detail", pk=customer.id)
+
+    else:
+        journal_form = JournalForm()
+        formset = AccountingLineFormSet()
+        invoice_form = InvoiceForm()
+
+    return render(request, "invoices_app/journal_form.html", {
+        "journal_form": journal_form,
+        "formset": formset,
+        "invoice_form": invoice_form,
+        "customer": customer,
+    })
 
 ##########################################
 

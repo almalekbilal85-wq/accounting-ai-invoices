@@ -97,11 +97,20 @@
 
 </div>
 
-
 <!-- Journals -->
 <div class="mt-4">
 
-    <h4 class="mb-3">Verifikationer</h4>
+    <!-- Header + Button -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <h4 class="mb-0">Verifikationer</h4>
+
+        <a href="{% url 'invoices_app:create_journal' customer.id %}"
+           class="btn btn-primary">
+            + Ny verifikation
+        </a>
+
+    </div>
 
     <div class="table-responsive">
 
@@ -109,7 +118,7 @@
 
             <thead class="table-dark">
                 <tr>
-                    <th>Verikikation #</th>
+                    <th>Verifikation #</th>
                     <th>Date</th>
                     <th>Description</th>
                 </tr>
