@@ -13,7 +13,7 @@ class Customer(models.Model):
     
 
     def __str__(self):
-        return self.name
+        return self.name or "Unnamed Customer"
     
     def get_absolute_url(self):
         return reverse("invoices_app:customer_detail", kwargs={"pk": self.pk})
@@ -50,7 +50,7 @@ class Journal(models.Model):
         if self.journal_number is not None:
             jounal_str = jounal_str + str(self.journal_number)
 
-        return jounal_str
+        return jounal_str or "Unnamed Journal"
 
 class Invoice(models.Model):
 
@@ -70,7 +70,7 @@ class Invoice(models.Model):
     )
 
     def __str__(self):
-        return self.invoice_number
+        return self.invoice_number or "Unnamed invoice"
     
 
 
