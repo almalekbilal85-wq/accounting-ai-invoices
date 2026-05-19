@@ -104,6 +104,9 @@ class CustomerDeleteView(DeleteView):
     success_url = reverse_lazy('invoices_app:customers_list')
 
 
+class JournalDetailView(DetailView):
+    model = models.Journal
+    template_name = 'invoices_app/journal_detail.html'
 ###########################
 
 from django.http import JsonResponse

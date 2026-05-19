@@ -1,0 +1,245 @@
+{% extends "invoices_app/base.html" %}
+
+{% block body_block %}
+
+<div class="container-fluid px-4 mt-4">
+
+    <!-- ===================== -->
+    <!-- HEADER (CLEANER WORKSPACE STYLE) -->
+    <!-- ===================== -->
+
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+        <div class="card-body p-4 d-flex justify-content-between align-items-center flex-wrap gap-3">
+
+            <div>
+                <h2 class="fw-bold mb-1">
+                    Verifikation V-{{ journal.journal_number }}
+                </h2>
+                <div class="text-muted">
+                    {{ journal.description|default:"Ingen beskrivning" }}
+                </div>
+            </div>
+
+            <div class="text-end d-flex gap-2 flex-wrap justify-content-end">
+                <span class="badge bg-dark rounded-pill px-3 py-2">
+                    {{ journal.entry_date }}
+                </span>
+                <span class="badge bg-success rounded-pill px-3 py-2">
+                    {{ journal.type }}
+                </span>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- ===================== -->
+        <!-- LEFT: INVOICE META PANEL -->
+        <!-- ===================== -->
+
+        <div class="col-lg-4">
+
+            <div class="position-sticky" style="top: 20px;">
+
+                {% for invoice in journal.invoices.all %}
+
+                <div class="card border-0 shadow-sm rounded-4 mb-3">
+
+                    <div class="card-body p-4">
+
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="fw-bold mb-0">Invoice</h5>
+                        </div>
+
+                        <div class="small text-muted mb-2">Invoice #</div>
+                        <div class="fw-semibold mb-3">{{ invoice.invoice_number }}</div>
+
+                        <div class="row g-2">
+
+                            <div class="col-6">
+                                <div class="text-muted small">Date</div>
+                                <div>{{ invoice.invoice_date }}</div>
+                            </div>
+
+                            <div class="col-6">
+                                <div class="text-muted small">Due</div>
+                                <div>{{ invoice.due_date }}</div>
+                            </div>
+
+                            <div class="col-6">
+                                <div class="text-muted small">Total</div>
+                                <div>{{ invoice.total_amount }}</div>
+                            </div>
+
+                            <div class="col-6">
+                                <div class="text-muted small">VAT</div>
+                                <div>{{ invoice.vat_amount }}</div>
+                            </div>
+
+                            <div class="col-6">
+                                <div class="text-muted small">Currency</div>
+                                <div>{{ invoice.currency }}</div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="text-muted small">Supplier</div>
+                                <div>{{ invoice.supplier }}</div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+        <!-- ===================== -->
+        <!-- RIGHT: ACCOUNTING + DOCUMENT VIEWER -->
+        <!-- ===================== -->
+
+        <div class="col-lg-8">
+
+            <!-- ACCOUNTING LINES -->
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+                <div class="card-body p-4">
+
+                    <h4 class="fw-bold mb-4">Accounting Lines</h4>
+
+                    <div class="table-responsive">
+
+                        <table class="table table-hover align-middle mb-0">
+
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Account</th>
+                                    <th class="text-end">Debit</th>
+                                    <th class="text-end">Credit</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                {% for line in journal.accounting_lines.all %}
+
+                                <tr>
+                                    <td class="fw-semibold">{{ line.account_number }}</td>
+                                    <td class="text-end">{{ line.debit }}</td>
+                                    <td class="text-end">{{ line.credit }}</td>
+                                </tr>
+
+                                {% empty %}
+                                <tr>
+                                    <td colspan="3" class="text-center text-muted py-4">
+                                        No accounting lines found
+                                    </td>
+                                </tr>
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- ===================== -->
+            <!-- BIG DOCUMENT VIEWER -->
+            <!-- ===================== -->
+
+            {% for invoice in journal.invoices.all %}
+
+            <div class="card border-0 shadow-lg rounded-4">
+
+                <div class="card-body p-0">
+
+                    <div class="p-4 border-bottom d-flex justify-content-between align-items-center">
+                        <h4 class="fw-bold mb-0">Invoice Preview</h4>
+                        <a href="{{ invoice.file.url }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                            Open Full Screen
+                        </a>
+                    </div>
+
+                    {% if invoice.file %}
+
+                    <!-- IMAGE (FULL WIDTH, BIG) -->
+                    <img
+                        src="{{ invoice.file.url }}"
+                        class="img-fluid w-100"
+                        style="max-height: 85vh; object-fit: contain; background: #f8f9fa;"
+                    >
+
+                    <!-- PDF VIEW (fallback viewer) -->
+                    <iframe
+                        src="{{ invoice.file.url }}"
+                        style="width: 100%; height: 85vh; border: none;"
+                    ></iframe>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const fileContainer = document.getElementById("invoice-file-url");
+
+    if (!fileContainer) return;
+
+    const url = fileContainer.dataset.url;
+
+    if (!url) return;
+
+    const imageEl = document.getElementById("invoice-image");
+    const pdfEl = document.getElementById("invoice-pdf");
+
+    imageEl.style.display = "none";
+    pdfEl.style.display = "none";
+    imageEl.src = "";
+    pdfEl.src = "";
+
+    
+
+    const extension = url.split('.').pop().toLowerCase();
+
+    if (["jpg", "jpeg", "png", "webp"].includes(extension)) {
+
+        imageEl.src = url;
+        imageEl.style.display = "block";
+
+    } else if (extension === "pdf") {
+
+        pdfEl.src = url;
+        pdfEl.style.display = "block";
+
+        button_pdf = document.getElementById("pdf-button");
+        button_pdf.style.display = "block";
+
+    }
+
+   
+
+});
+
+</script>
+
+{% endblock %}

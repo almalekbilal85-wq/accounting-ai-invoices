@@ -17,6 +17,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATES_DIR = Path.joinpath(BASE_DIR, 'templates')
 
 
+X_FRAME_OPTIONS = "SAMEORIGIN"
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
@@ -53,6 +54,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "AccountingProject.urls"
 
+
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -69,6 +71,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "AccountingProject.wsgi.application"
+
 
 
 # Database
@@ -120,3 +123,4 @@ STATIC_URL = "/static/"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = Path.joinpath(BASE_DIR, 'media')
+

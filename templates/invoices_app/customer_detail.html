@@ -339,8 +339,9 @@
                     {% for journal in customer.journals.all %}
 
                     <tr class="journal-row"
-                        style="cursor:pointer; transition:0.2s;">
-
+                        style="cursor:pointer; transition:0.2s;"
+                        onclick="window.location='{% url 'invoices_app:journal_detail' journal.pk %}'">
+                        
                         <!-- Counter -->
                         <td class="ps-4">
                             {{ forloop.counter }}
