@@ -12,4 +12,5 @@ urlpatterns = [
     path('customers/update/<int:pk>/', views.CustomerUpdateView.as_view(),name='update_customer'),
     path('customers/delete/<int:pk>/', views.CustomerDeleteView.as_view(),name='delete_customer'),
     path('customers/create_journal/<int:customer_id>/', views.create_journal,name='create_journal'),
+    path("ai/extract-invoice/", views.ai_journal_extract, name="ai_extract_invoice"),
 ]

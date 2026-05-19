@@ -102,3 +102,27 @@ class CustomerUpdateView(UpdateView):
 class CustomerDeleteView(DeleteView):
     model = models.Customer
     success_url = reverse_lazy('invoices_app:customers_list')
+
+
+###########################
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
+def ai_journal_extract(request):
+
+    if request.method == "POST":
+
+        uploaded_file = request.FILES.get("file")
+
+        if not uploaded_file:
+            return JsonResponse({"error": "No file uploaded"}, status=400)
+
+        extension = uploaded_file.name.split(".")[-1].lower()
+
+        result = json.loads(getAIOutput(uploaded_file, extension))
+
+        return JsonResponse(result)
+
+    return JsonResponse({"error": "Invalid request"}, status=400)
