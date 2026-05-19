@@ -2,66 +2,240 @@
 {% extends "invoices_app/base.html" %}
 
 {% block body_block %}
+<div class="container-fluid px-4 mt-4">
 
-<div class="container mt-5">
+    <!-- Header -->
+    <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center mb-4 gap-3">
 
-    <div class="card shadow rounded-4">
-        <div class="card-body">
+        <div>
 
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="mb-0">Kunder</h2>
+            <h1 class="fw-bold mb-1">
+                Kundregister
+            </h1>
 
-                <!-- Optional Add Button -->
-                
-                <a href="{% url 'invoices_app:create_customer' %}" class="btn btn-primary">
-                    Ny kund
-                </a>
-                
-            </div>
-
-            <div class="table-responsive">
-
-                <table class="table table-hover align-middle">
-
-                    <thead class="table-dark">
-                        <tr>
-                            <th>#</th>
-                            <th>Namn</th>
-                            <th>Organization Number</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-
-                        {% for customer in customer_list %}
-                        <tr style="cursor:pointer;" onclick="window.location='{% url 'invoices_app:customer_detail' customer.pk %}'">
-                            <td>{{ forloop.counter }}</td>
-
-                            <td>
-                                <strong>{{ customer.name }}</strong>
-                            </td>
-
-                            <td>
-                                {{ customer.org_number }}
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="3" class="text-center text-muted">
-                                No customers found.
-                            </td>
-                        </tr>
-                        {% endfor %}
-
-                    </tbody>
-
-                </table>
-
-            </div>
+            <p class="text-muted mb-0">
+                Hantera kunder, verifikationer och bokföringsdata
+            </p>
 
         </div>
+
+        <!-- Actions -->
+        <div class="d-flex gap-2">
+
+            <!-- Search -->
+            <div class="position-relative">
+
+                <input type="text"
+                       class="form-control rounded-pill ps-5"
+                       placeholder="Sök kunder..."
+                       style="width:260px;">
+
+                <span class="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted">
+                    🔍
+                </span>
+
+            </div>
+
+            <!-- Add Customer -->
+            <a href="{% url 'invoices_app:create_customer' %}"
+               class="btn btn-success rounded-pill px-4 shadow-sm">
+
+                + Ny kund
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- Main Card -->
+    <div class="card border-0 shadow-lg rounded-5 overflow-hidden">
+
+        <!-- Top Bar -->
+        <div class="bg-dark text-white px-4 py-3 d-flex justify-content-between align-items-center">
+
+            <div>
+
+                <h5 class="mb-0 fw-bold">
+                    Kundlista
+                </h5>
+
+            </div>
+
+            <span class="badge bg-success rounded-pill px-3 py-2">
+                {{ customer_list|length }} kunder
+            </span>
+
+        </div>
+
+        <!-- Table -->
+        <div class="table-responsive">
+
+            <table class="table align-middle mb-0">
+
+                <thead style="background:#f8fafc;">
+
+                    <tr>
+
+                        <th class="ps-4 py-3 text-muted fw-semibold">
+                            #
+                        </th>
+
+                        <th class="py-3 text-muted fw-semibold">
+                            Kund
+                        </th>
+
+                        <th class="py-3 text-muted fw-semibold">
+                            Organisationsnummer
+                        </th>
+
+                        <th class="py-3 text-muted fw-semibold">
+                            Status
+                        </th>
+
+                        <th class="text-end pe-4 py-3 text-muted fw-semibold">
+                            Åtgärder
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for customer in customer_list %}
+
+                    <tr class="border-top customer-row"
+                        style="cursor:pointer; transition:0.2s;"
+                        onclick="window.location='{% url 'invoices_app:customer_detail' customer.pk %}'">
+
+                        <!-- Number -->
+                        <td class="ps-4">
+
+                            <span class="text-muted">
+                                {{ forloop.counter }}
+                            </span>
+
+                        </td>
+
+                        <!-- Customer -->
+                        <td>
+
+                            <div class="d-flex align-items-center gap-3">
+
+                                <!-- Avatar -->
+                                <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center fw-bold"
+                                     style="width:45px; height:45px; min-width:45px;">
+
+                                    {{ customer.name|slice:":1"|upper }}
+
+                                </div>
+
+                                <div>
+
+                                    <div class="fw-bold">
+                                        {{ customer.name }}
+                                    </div>
+
+                                    <div class="small text-muted">
+                                        Customer Profile
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+                        <!-- Org Number -->
+                        <td>
+
+                            <span class="fw-semibold">
+                                {{ customer.org_number }}
+                            </span>
+
+                        </td>
+
+                        <!-- Status -->
+                        <td>
+
+                            <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-2">
+
+                                Aktiv
+
+                            </span>
+
+                        </td>
+
+                        <!-- Actions -->
+                        <td class="text-end pe-4">
+
+                            <a href="{% url 'invoices_app:customer_detail' customer.pk %}"
+                               class="btn btn-sm btn-outline-dark rounded-pill px-3">
+
+                                Öppna
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="5" class="text-center py-5">
+
+                            <div class="d-flex flex-column align-items-center">
+
+                                <div class="mb-3"
+                                     style="font-size:4rem; opacity:0.3;">
+
+                                    👥
+
+                                </div>
+
+                                <h4 class="fw-bold">
+                                    Inga kunder hittades
+                                </h4>
+
+                                <p class="text-muted">
+                                    Börja genom att skapa din första kund.
+                                </p>
+
+                                <a href="{% url 'invoices_app:create_customer' %}"
+                                   class="btn btn-success rounded-pill px-4 mt-2">
+
+                                    + Skapa kund
+
+                                </a>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
     </div>
 
 </div>
+
+<!-- Hover Effect -->
+<style>
+
+.customer-row:hover {
+    background-color:#f8fafc;
+}
+
+</style>
 
 {% endblock %}

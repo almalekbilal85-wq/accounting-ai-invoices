@@ -2,17 +2,225 @@
 {% extends "invoices_app/base.html" %}
 
   {% block body_block %}
-<div class="container my-5">
-  <div class="p-5 text-center text-white rounded-4 shadow"
-       style="background: linear-gradient(135deg, #002aff, #8000ff);">
+<div class="container-fluid px-4 mt-4">
 
-    <h1 class="display-3 fw-bold">Välkommen till ALMALEK Bokföring</h1>
-    <p class="lead">Vi hjälper dig med bokföring och deklaration och allt sånt</p>
+    <div class="row align-items-center g-4">
 
-    <div class="mt-4">
-      <a href="{% url 'invoices_app:upload' %}" class="btn btn-light btn-lg px-4 me-2">Ladda upp faktura</a>
-      <a href="#" class="btn btn-outline-light btn-lg px-4">Om oss</a>
+        <!-- LEFT CONTENT -->
+        <div class="col-lg-7">
+
+            <div class="card border-0 shadow-lg rounded-5 overflow-hidden"
+                 style="background: linear-gradient(135deg, #0f172a 0%, #111827 40%, #166534 100%);">
+
+                <div class="card-body p-5 text-white">
+
+                    <!-- Small Badge -->
+                    <div class="mb-4">
+
+                        <span class="badge rounded-pill bg-success px-3 py-2 fs-6">
+                            AI-Driven Accounting Platform
+                        </span>
+
+                    </div>
+
+                    <!-- Heading -->
+                    <h1 class="display-3 fw-bold mb-4">
+
+                        Smart Bokföring
+                        <br>
+
+                        för Moderna Företag
+
+                    </h1>
+
+                    <!-- Description -->
+                    <p class="lead text-light opacity-75 mb-5"
+                       style="max-width:700px;">
+
+                        Automatisera bokföring, fakturahantering och verifikationer
+                        med AI-driven dataextraktion och smart journalföring.
+
+                    </p>
+
+                    <!-- Buttons -->
+                    <div class="d-flex flex-wrap gap-3">
+
+                        <a href="{% url 'invoices_app:upload' %}"
+                           class="btn btn-success btn-lg rounded-pill px-5 py-3 shadow">
+
+                            📤 Ladda upp faktura
+
+                        </a>
+
+                        <a href="{% url 'invoices_app:customers_list' %}"
+                           class="btn btn-outline-light btn-lg rounded-pill px-5 py-3">
+
+                            👥 Kunder
+
+                        </a>
+
+                    </div>
+
+                    <!-- Stats -->
+                    <div class="row mt-5 g-4">
+
+                        <div class="col-md-4">
+
+                            <div class="bg-white bg-opacity-10 rounded-4 p-3">
+
+                                <h3 class="fw-bold mb-1">
+                                    AI
+                                </h3>
+
+                                <p class="mb-0 text-light opacity-75">
+                                    Automatisk dataextraktion
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-4">
+
+                            <div class="bg-white bg-opacity-10 rounded-4 p-3">
+
+                                <h3 class="fw-bold mb-1">
+                                    BAS
+                                </h3>
+
+                                <p class="mb-0 text-light opacity-75">
+                                    Svensk kontoplan
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-4">
+
+                            <div class="bg-white bg-opacity-10 rounded-4 p-3">
+
+                                <h3 class="fw-bold mb-1">
+                                    OCR
+                                </h3>
+
+                                <p class="mb-0 text-light opacity-75">
+                                    Intelligent fakturatolkning
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT SIDE -->
+        <div class="col-lg-5">
+
+            <div class="card border-0 shadow-lg rounded-5 h-100">
+
+                <div class="card-body p-5">
+
+                    <h3 class="fw-bold mb-4">
+                        Systemöversikt
+                    </h3>
+
+                    <!-- Feature Items -->
+
+                    <div class="d-flex align-items-start mb-4">
+
+                        <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+                             style="width:50px; height:50px; min-width:50px;">
+
+                            📄
+
+                        </div>
+
+                        <div>
+
+                            <h5 class="fw-bold mb-1">
+                                Fakturahantering
+                            </h5>
+
+                            <p class="text-muted mb-0">
+                                Upload av PDF och bilder med AI-analys.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="d-flex align-items-start mb-4">
+
+                        <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+                             style="width:50px; height:50px; min-width:50px;">
+
+                            📊
+
+                        </div>
+
+                        <div>
+
+                            <h5 class="fw-bold mb-1">
+                                Journalföring
+                            </h5>
+
+                            <p class="text-muted mb-0">
+                                Automatiska konteringsförslag och balanskontroll.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="d-flex align-items-start mb-4">
+
+                        <div class="bg-dark text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+                             style="width:50px; height:50px; min-width:50px;">
+
+                            ⚡
+
+                        </div>
+
+                        <div>
+
+                            <h5 class="fw-bold mb-1">
+                                Snabbt Arbetsflöde
+                            </h5>
+
+                            <p class="text-muted mb-0">
+                                Hantera kunder och verifikationer i realtid.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Bottom CTA -->
+                    <div class="mt-5">
+
+                        <a href="{% url 'invoices_app:customers_list' %}"
+                           class="btn btn-dark w-100 rounded-pill py-3">
+
+                            Öppna Kundregister
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
-  </div>
+
 </div>
    {% endblock %}

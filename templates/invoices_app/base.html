@@ -8,31 +8,84 @@
 
 </head>
 <body>
-   <nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm">
-  <div class="container">
-    <a class="navbar-brand fw-bold" href="#">ALMALEK Bokföring</a>
+   <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm py-3">
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+    <div class="container-fluid px-4">
 
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item">
-          <a class="nav-link active" href="{% url 'index' %}">Hem</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'invoices_app:upload' %}">Ladda upp</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'invoices_app:customers_list' %}">Kunder</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
-        </li>
-      </ul>
+        <!-- Logo / Brand -->
+        <a class="navbar-brand d-flex align-items-center gap-2 fw-bold fs-4"
+           href="{% url 'index' %}">
+
+            <span class="bg-success rounded-circle d-inline-block"
+                  style="width:14px; height:14px;">
+            </span>
+
+            ALMALEK Bokföring
+
+        </a>
+
+        <!-- Mobile Button -->
+        <button class="navbar-toggler border-0 shadow-none"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav">
+
+            <span class="navbar-toggler-icon"></span>
+
+        </button>
+
+        <!-- Navbar Content -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+
+            <!-- Left Links -->
+            <ul class="navbar-nav ms-4">
+
+                <li class="nav-item">
+
+                    <a class="nav-link px-3 rounded-pill"
+                       href="{% url 'index' %}">
+                        Dashboard
+                    </a>
+
+                </li>
+
+                <li class="nav-item">
+
+                    <a class="nav-link px-3 rounded-pill"
+                       href="{% url 'invoices_app:upload' %}">
+                        Ladda upp
+                    </a>
+
+                </li>
+
+
+            </ul>
+
+            <!-- Right Side -->
+            <div class="ms-auto d-flex align-items-center gap-3">
+
+                <!-- Quick Action -->
+                <a href="{% url 'invoices_app:customers_list' %}"
+                   class="btn btn-success rounded-pill px-4">
+
+                    Kunder
+
+                </a>
+
+                <!-- Admin -->
+                <a href="{% url 'admin:index' %}"
+                   class="btn btn-outline-light rounded-pill px-4">
+
+                    Admin
+
+                </a>
+
+            </div>
+
+        </div>
+
     </div>
-  </div>
+
 </nav>
 
 <div class="container">

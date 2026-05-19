@@ -1,72 +1,133 @@
 
 {% extends "invoices_app/base.html" %}
 {% block body_block %}
+<div class="container-fluid px-4 mt-4">
 
-<div class="container mt-5">
+    <div class="row justify-content-center">
 
-    <div class="card shadow rounded-4">
+        <div class="col-lg-8">
 
-        <div class="card-body">
+            <!-- HEADER CARD -->
+            <div class="card border-0 shadow-lg rounded-5 overflow-hidden mb-4">
 
-            <!-- Title -->
-            <h2 class="mb-4">
+                <div class="card-body p-5 text-white"
+                     style="background: linear-gradient(135deg, #0f172a, #111827, #166534);">
 
-                {% if not form.instance.pk %}
-                    Ny kund
-                {% else %}
-                    Uppdatera kund
-                {% endif %}
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
 
-            </h2>
+                        <div>
 
-            <!-- Form -->
-            <form method="POST">
+                            <h1 class="fw-bold mb-1">
 
-                {% csrf_token %}
+                                {% if not form.instance.pk %}
+                                    Skapa ny kund
+                                {% else %}
+                                    Redigera kund
+                                {% endif %}
 
-                <div class="row">
+                            </h1>
 
+                            <p class="text-white-50 mb-0">
+                                Hantera kundinformation och organisationsdata
+                            </p>
+
+                        </div>
+
+                        <div class="text-end">
+
+                            <span class="badge bg-success rounded-pill px-3 py-2">
+                                CRM Modul
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- FORM CARD -->
+            <div class="card border-0 shadow-lg rounded-5">
+
+                <div class="card-body p-5">
+
+                    <form method="POST">
+                        {% csrf_token %}
+
+                        <!-- FORM GRID -->
+                        <div class="row g-4">
                     {% for field in form %}
 
                         <div class="col-md-6 mb-3">
 
-                            <label class="form-label">
-                                {{ field.label }}
-                            </label>
+                            <div class="row align-items-center g-2">
 
-                            {{ field }}
+                                <!-- LABEL -->
+                                <div class="col-4 text-end">
 
-                            {% if field.errors %}
-                                <div class="text-danger small">
-                                    {{ field.errors }}
+                                    <label for="{{ field.id_for_label }}"
+                                        class="form-label fw-semibold text-secondary small mb-0">
+
+                                        {{ field.label }}
+
+                                    </label>
+
                                 </div>
-                            {% endif %}
+
+                                <!-- INPUT -->
+                                <div class="col-8">
+
+                                    <div class="p-2 rounded-3 bg-light border">
+
+                                        {{ field }}
+
+                                    </div>
+
+                                    {% if field.errors %}
+                                        <div class="text-danger small mt-1">
+                                            {{ field.errors }}
+                                        </div>
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
 
                         </div>
 
                     {% endfor %}
 
+                        </div>
+
+                        <!-- ACTION BAR -->
+                        <div class="mt-5 d-flex justify-content-between align-items-center flex-wrap gap-3">
+
+                            <a href="{% url 'invoices_app:customers_list' %}"
+                               class="btn btn-outline-secondary rounded-pill px-4 py-2">
+
+                                ← Avbryt
+
+                            </a>
+
+                            <button type="submit"
+                                    class="btn btn-success rounded-pill px-5 py-3 shadow-sm">
+
+                                {% if not form.instance.pk %}
+                                    ➕ Skapa kund
+                                {% else %}
+                                    💾 Spara ändringar
+                                {% endif %}
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
                 </div>
 
-                <!-- Buttons -->
-                <div class="d-flex gap-2 mt-3">
-
-                    <button type="submit" class="btn btn-success">
-                        {% if not form.instance.pk %}
-                            Skapa kund
-                        {% else %}
-                            Spara ändringar
-                        {% endif %}
-                    </button>
-
-                    <a href="{% url 'invoices_app:customers_list' %}"
-                       class="btn btn-secondary">
-                        Avbryt
-                    </a>
-
-                </div>
-
-            </form>
+            </div>
 
         </div>
 
@@ -74,4 +135,19 @@
 
 </div>
 
+<!-- OPTIONAL STYLE FIX FOR FLOATING INPUTS -->
+<style>
+.form-floating > input,
+.form-floating > textarea,
+.form-floating > select {
+    height: 58px;
+    border-radius: 14px;
+    border: 1px solid #e5e7eb;
+    padding-left: 14px;
+}
+
+.form-floating label {
+    padding-left: 14px;
+}
+</style>
 {% endblock %}

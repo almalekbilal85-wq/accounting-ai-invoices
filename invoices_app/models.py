@@ -54,7 +54,7 @@ class Journal(models.Model):
 
 class Invoice(models.Model):
 
-    journal = models.ForeignKey(Journal, on_delete=models.CASCADE, null=True, blank=True)
+    journal = models.ForeignKey(Journal, related_name='invoices', on_delete=models.CASCADE, null=True, blank=True)
     invoice_number = models.CharField(max_length=256, blank=True, null=True)
     invoice_date = models.DateField(blank=True, null=True)
     due_date = models.DateField(blank=True, null=True)
