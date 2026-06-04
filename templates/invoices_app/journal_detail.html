@@ -1,5 +1,7 @@
 {% extends "invoices_app/base.html" %}
 
+{% load static %}
+
 {% block body_block %}
 
 <div class="container-fluid px-4 mt-4">
@@ -9,27 +11,48 @@
     <!-- ===================== -->
 
     <div class="card border-0 shadow-sm rounded-4 mb-4">
-        <div class="card-body p-4 d-flex justify-content-between align-items-center flex-wrap gap-3">
 
-            <div>
-                <h2 class="fw-bold mb-1">
-                    Verifikation V-{{ journal.journal_number }}
-                </h2>
-                <div class="text-muted">
-                    {{ journal.description|default:"Ingen beskrivning" }}
+        <div class="card-body p-4">
+
+            <div class="row align-items-center">
+
+                <div class="col">
+
+                    <div class="text-muted small mb-1">
+                        Verification
+                    </div>
+
+                    <h2 class="fw-bold mb-1">
+                        V-{{ journal.journal_number }}
+                    </h2>
+
+                    <div class="text-muted">
+                        {{ journal.description|default:"Ingen beskrivning" }}
+                    </div>
+
                 </div>
+
+                <div class="col-auto">
+
+                 
+                    <div class="d-flex gap-2 justify-content-end">
+
+                        <a href="{% url 'invoices_app:edit_journal' journal.id %}" class="btn btn-outline-secondary">
+                            Ändra
+                        </a>
+
+                        <a href="{% url 'invoices_app:delete_journal' journal.id %}" class="btn btn-danger">
+                            ta Bort
+                        </a>
+
+                    </div>
+
+                </div>
+
+                </div>
+
             </div>
 
-            <div class="text-end d-flex gap-2 flex-wrap justify-content-end">
-                <span class="badge bg-dark rounded-pill px-3 py-2">
-                    {{ journal.entry_date }}
-                </span>
-                <span class="badge bg-success rounded-pill px-3 py-2">
-                    {{ journal.type }}
-                </span>
-            </div>
-
-        </div>
     </div>
 
     <div class="row g-4">
@@ -198,48 +221,7 @@
 
 </div>
 
-<script>
-document.addEventListener("DOMContentLoaded", function () {
 
-    const fileContainer = document.getElementById("invoice-file-url");
-
-    if (!fileContainer) return;
-
-    const url = fileContainer.dataset.url;
-
-    if (!url) return;
-
-    const imageEl = document.getElementById("invoice-image");
-    const pdfEl = document.getElementById("invoice-pdf");
-
-    imageEl.style.display = "none";
-    pdfEl.style.display = "none";
-    imageEl.src = "";
-    pdfEl.src = "";
-
-    
-
-    const extension = url.split('.').pop().toLowerCase();
-
-    if (["jpg", "jpeg", "png", "webp"].includes(extension)) {
-
-        imageEl.src = url;
-        imageEl.style.display = "block";
-
-    } else if (extension === "pdf") {
-
-        pdfEl.src = url;
-        pdfEl.style.display = "block";
-
-        button_pdf = document.getElementById("pdf-button");
-        button_pdf.style.display = "block";
-
-    }
-
-   
-
-});
-
-</script>
+<script src="{% static 'invoices_app/js/journal_detail.js' %}"></script>
 
 {% endblock %}

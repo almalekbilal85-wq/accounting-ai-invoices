@@ -82,6 +82,76 @@ def create_journal(request, customer_id):
         "customer": customer,
     })
 
+
+def edit_journal(request, journal_id):
+    journal = get_object_or_404(models.Journal, id=journal_id)
+    customer = journal.customer
+
+    # Get first invoice if it exists
+    invoice = journal.invoices.first()
+
+    if request.method == "POST":
+        journal_form = JournalForm(
+            request.POST,
+            instance=journal
+        )
+
+        formset = AccountingLineFormSet(
+            request.POST,
+            instance=journal
+        )
+
+        invoice_form = InvoiceForm(
+            request.POST,
+            request.FILES,
+            instance=invoice
+        )
+
+        if journal_form.is_valid() and formset.is_valid():
+
+            journal = journal_form.save()
+
+            formset.instance = journal
+            formset.save()
+
+            # Invoice handling
+            if journal.type == "invoice" and invoice_form.is_valid():
+                invoice = invoice_form.save(commit=False)
+                invoice.journal = journal
+                invoice.save()
+
+            # Optional: delete invoice if type changed away from invoice
+            elif journal.type != "invoice":
+                journal.invoices.all().delete()
+
+            return redirect(
+                "invoices_app:customer_detail",
+                pk=customer.id
+            )
+
+    else:
+        journal_form = JournalForm(instance=journal)
+
+        formset = AccountingLineFormSet(
+            instance=journal
+        )
+
+        invoice_form = InvoiceForm(
+            instance=invoice
+        )
+
+    return render(
+        request,
+        "invoices_app/journal_form.html",
+        {
+            "journal_form": journal_form,
+            "formset": formset,
+            "invoice_form": invoice_form,
+            "customer": customer,
+            "journal": journal,
+        },
+    )
+
 ##########################################
 
 class CustomerListView(ListView):
@@ -107,6 +177,10 @@ class CustomerDeleteView(DeleteView):
 class JournalDetailView(DetailView):
     model = models.Journal
     template_name = 'invoices_app/journal_detail.html'
+
+class JournalDeleteView(DeleteView):
+    model = models.Journal
+    success_url = reverse_lazy('invoices_app:customers_list')
 ###########################
 
 from django.http import JsonResponse
