@@ -123,4 +123,5 @@ API_KEY=your_openai_api_key_here
 
 ### 5. Run migrations and start server
 python manage.py migrate
+
 python manage.py runserver
