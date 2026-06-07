@@ -133,11 +133,15 @@ pip install -r requirements.txt
 ### 4. Set environment variables
 Create a `.env` file and add:
 
+```bash
 API_KEY=your_openai_api_key_here
+```
 
 ⚠️ The API key is not included in this repository and must be provided by the user.
 
 ### 5. Run migrations and start server
+```bash
 python manage.py migrate
 
 python manage.py runserver
+```
