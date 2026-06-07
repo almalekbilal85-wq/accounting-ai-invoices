@@ -1,12 +1,20 @@
 # AI Powered Accounting Assistant
 
-A Django based application that helps automate bookkeping workflows for a small accounting company
-
+A Django-based application that helps automate bookkeeping workflows for small accounting firms through AI-powered invoice processing and accounting automation.
 ## Overview
 
 This project combines traditional accounting workflows with Large Language Models (LLMs) to reduce manual work involved in processing invoices and accounting documents.
 
 Users can upload invoices as images or PDFs, automatically extract relevant information using AI, manage client companies, create accounting verifications, and generate SIE files for export to accounting systems.
+
+## Highlights
+
+- AI-powered invoice extraction using OpenAI
+- PDF and image invoice processing
+- Client and invoice management
+- Accounting verification (verifikation) handling
+- SIE file generation
+- Built with Django, Python, Bootstrap, and OpenAI APIs
 
 ---
 
@@ -103,16 +111,24 @@ Will be filled later
 
 ---
 
-## Getting Started
-
 ### 1. Clone the repository
+
+```bash
 git clone https://github.com/almalekbilal85-wq/accounting-ai-invoices.git
+cd accounting-ai-invoices
+```
 
 ### 2. Create virtual environment
+
+```bash
 python -m venv venv
+```
 
 ### 3. Install dependencies
+
+```bash
 pip install -r requirements.txt
+```
 
 ### 4. Set environment variables
 Create a `.env` file and add:
