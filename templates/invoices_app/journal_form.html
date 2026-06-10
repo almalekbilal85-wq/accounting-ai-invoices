@@ -7,6 +7,21 @@
 
 <div class="container-fluid mt-4">
 
+    <div class="container-fluid mt-4">
+
+    <div class="page-header">
+
+        <h1 class="fw-bold mb-1">
+            Create Journal Entry
+        </h1>
+
+        <p class="text-muted mb-0">
+            Manage journal information, invoice details and accounting entries.
+        </p>
+
+    </div>
+
+    
     <form method="POST" enctype="multipart/form-data">
 
         {% csrf_token %}
@@ -19,71 +34,111 @@
 
             <div class="col-lg-4">
 
-                <!-- Journal Card -->
-                <div class="card shadow border-0 rounded-4 mb-4">
+                <div class="sticky-sidebar">
 
-                    <div class="card-body">
+                    <!-- Journal Card -->
+                    <div class="card workspace-card mb-4">
 
-                        <h4 class="mb-4">
-                            Journal
-                        </h4>
+                        <div class="card-body p-4">
 
-                        {% for field in journal_form %}
+                            <div class="d-flex align-items-center mb-4">
 
-                            <div class="mb-3">
+                                <div class="section-icon bg-primary bg-opacity-10 me-3">
+                                    📘
+                                </div>
 
-                                <label class="form-label fw-semibold">
-                                    {{ field.label }}
-                                </label>
+                                <div>
 
-                                {{ field }}
+                                    <h4 class="fw-bold mb-0">
+                                        Journal
+                                    </h4>
 
-                                {% if field.errors %}
-                                    <div class="text-danger small">
-                                        {{ field.errors }}
-                                    </div>
-                                {% endif %}
+                                    <small class="text-muted">
+                                        Basic journal information
+                                    </small>
+
+                                </div>
 
                             </div>
 
-                        {% endfor %}
+                            {% for field in journal_form %}
 
-                    </div>
+                                <div class="mb-3">
 
-                </div>
+                                    <label class="form-label fw-semibold">
+                                        {{ field.label }}
+                                    </label>
 
-                <!-- Invoice Card -->
-                <div id="invoice-section" style="display:none;">
+                                    {{ field }}
 
-                    <div class="card shadow border-0 rounded-4">
+                                    {% if field.errors %}
+                                        <div class="text-danger small mt-1">
+                                            {{ field.errors }}
+                                        </div>
+                                    {% endif %}
 
-                        <div class="card-body">
-
-                            <h4 class="mb-4">
-                                Invoice
-                            </h4>
-
-                            <div class="row">
-                    {% for field in invoice_form %}
-
-                        <div class="col-12 mb-3">
-
-                            <label class="form-label fw-semibold">
-                                {{ field.label }}
-                            </label>
-
-                            {{ field }}
-
-                            {% if field.errors %}
-                                <div class="text-danger small">
-                                    {{ field.errors }}
                                 </div>
-                            {% endif %}
 
+                            {% endfor %}
 
                         </div>
 
-                    {% endfor %}
+                    </div>
+
+                    <!-- Invoice Card -->
+                    <div id="invoice-section" style="display:none;">
+
+                        <div class="card workspace-card">
+
+                            <div class="card-body p-4">
+
+                                <div class="d-flex align-items-center mb-4">
+
+                                    <div class="section-icon bg-success bg-opacity-10 me-3">
+                                        🧾
+                                    </div>
+
+                                    <div>
+
+                                        <h4 class="fw-bold mb-0">
+                                            Invoice
+                                        </h4>
+
+                                        <small class="text-muted">
+                                            Supplier and invoice details
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+
+                                    {% for field in invoice_form %}
+
+                                        <div class="row align-items-center mb-3">
+
+                                            <label class="col-sm-4 col-form-label fw-semibold">
+                                                {{ field.label }}
+                                            </label>
+
+                                            <div class="col-sm-8">
+
+                                                {{ field }}
+
+                                                {% if field.errors %}
+                                                    <div class="text-danger small mt-1">
+                                                        {{ field.errors }}
+                                                    </div>
+                                                {% endif %}
+
+                                            </div>
+
+                                        </div>
+
+                                    {% endfor %}
+
+                                </div>
 
                             </div>
 
@@ -101,21 +156,25 @@
 
             <div class="col-lg-8">
 
-                <div class="card shadow border-0 rounded-4 h-100">
+                <div class="card workspace-card h-100">
 
-                    <div class="card-body d-flex flex-column">
+                    <div class="card-body p-4 d-flex flex-column">
 
                         <!-- Header -->
-                        <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div class="d-flex align-items-center mb-4">
+
+                            <div class="section-icon bg-warning bg-opacity-10 me-3">
+                                📊
+                            </div>
 
                             <div>
 
-                                <h4 class="mb-1">
+                                <h4 class="fw-bold mb-1">
                                     Accounting Lines
                                 </h4>
 
                                 <p class="text-muted mb-0">
-                                    Debit and credit entries
+                                    Review debit and credit entries
                                 </p>
 
                             </div>
@@ -127,24 +186,22 @@
                         <!-- Table -->
                         <div class="table-responsive flex-grow-1">
 
-                            <table class="table table-bordered align-middle">
+                            <table class="table table-hover align-middle">
 
-                                <thead class="table-dark">
+                                <thead class="table-light">
 
                                     <tr>
-                                        <th style="width: 35%;">
+                                        <th style="width:35%;">
                                             Account
                                         </th>
 
-                                        <th style="width: 25%;">
+                                        <th style="width:25%;">
                                             Debit
                                         </th>
 
-                                        <th style="width: 25%;">
+                                        <th style="width:25%;">
                                             Credit
                                         </th>
-
-                                      
                                     </tr>
 
                                 </thead>
@@ -163,7 +220,7 @@
                                                 {{ form.account_number }}
 
                                                 {% if form.account_number.errors %}
-                                                    <div class="text-danger small">
+                                                    <div class="text-danger small mt-1">
                                                         {{ form.account_number.errors }}
                                                     </div>
                                                 {% endif %}
@@ -173,7 +230,7 @@
                                                 {{ form.debit }}
 
                                                 {% if form.debit.errors %}
-                                                    <div class="text-danger small">
+                                                    <div class="text-danger small mt-1">
                                                         {{ form.debit.errors }}
                                                     </div>
                                                 {% endif %}
@@ -183,13 +240,11 @@
                                                 {{ form.credit }}
 
                                                 {% if form.credit.errors %}
-                                                    <div class="text-danger small">
+                                                    <div class="text-danger small mt-1">
                                                         {{ form.credit.errors }}
                                                     </div>
                                                 {% endif %}
                                             </td>
-
-                                          
 
                                         </tr>
 
@@ -201,49 +256,81 @@
 
                         </div>
 
-                        <!-- Invoice Preview Area -->
-                        <div class="mt-4">
+                        <!-- Invoice Preview -->
+                        <div class="mt-5">
 
-                            <h5 class="mb-3">Invoice Preview</h5>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
 
-                            <!-- Image Preview -->
-                            {% if invoice_form.instance.file %}
-                                <img id="invoice-preview"
-                                    class="img-fluid rounded shadow border"
-                                    src="{{ invoice_form.instance.file.url }}"
-                                    style="display:block; width:100%; max-height:650px; object-fit:contain;" />
+                                <div>
 
-                                <iframe id="pdf-preview"
-                                        src="{{ invoice_form.instance.file.url }}"
-                                        style="display:block; width:100%; height:650px;"></iframe>
-                            {% else %}
-                                <img id="invoice-preview"
-                                class="img-fluid rounded shadow border"
-                                style="width:100%; max-height:650px; object-fit:contain; display:none;">
+                                    <h4 class="fw-bold mb-1">
+                                        Invoice Preview
+                                    </h4>
 
-                                
-                                <iframe id="pdf-preview"
-                                        class="rounded shadow border"
-                                        style="width:100%; height:650px; display:none;">
-                                </iframe>
-                            {% endif %}
-                            
-                           
-                            
+                                    <small class="text-muted">
+                                        Review uploaded invoice document
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+                            <div class="preview-container">
+
+                                {% if invoice_form.instance.file %}
+
+                                    <img id="invoice-preview"
+                                         src="{{ invoice_form.instance.file.url }}"
+                                         class="img-fluid rounded shadow-sm border"
+                                         style="display:block;width:100%;max-height:650px;object-fit:contain;">
+
+                                    <iframe id="pdf-preview"
+                                            src="{{ invoice_form.instance.file.url }}"
+                                            class="rounded shadow-sm border mt-3"
+                                            style="display:block;width:100%;height:650px;">
+                                    </iframe>
+
+                                {% else %}
+
+                                    <img id="invoice-preview"
+                                         class="img-fluid rounded shadow-sm border"
+                                         style="width:100%;max-height:650px;object-fit:contain;display:none;">
+
+                                    <iframe id="pdf-preview"
+                                            class="rounded shadow-sm border"
+                                            style="width:100%;height:650px;display:none;">
+                                    </iframe>
+
+                                {% endif %}
+
+                            </div>
 
                         </div>
+
                         <!-- Buttons -->
-                        <div class="d-flex justify-content-end gap-2 mt-4">
+                        <div class="border-top mt-4 pt-4">
 
-                            <a href="{% url 'invoices_app:customers_list' %}"
-                               class="btn btn-outline-secondary">
-                                Cancel
-                            </a>
+                            <div class="d-flex justify-content-between align-items-center">
 
-                            <button type="submit"
-                                    class="btn btn-success px-4">
-                                Save Journal
-                            </button>
+                                <small class="text-muted">
+                                    Review all information before saving.
+                                </small>
+
+                                <div class="d-flex gap-2">
+
+                                    <a href="{% url 'invoices_app:customers_list' %}"
+                                       class="btn btn-light border px-4">
+                                        Cancel
+                                    </a>
+
+                                    <button type="submit"
+                                            class="btn btn-success px-5">
+                                        Save Journal
+                                    </button>
+
+                                </div>
+
+                            </div>
 
                         </div>
 
@@ -256,6 +343,8 @@
         </div>
 
     </form>
+
+</div>
 
 </div>
 
@@ -296,6 +385,7 @@
 <script src="{% static 'invoices_app/js/journal_form.js' %}"></script>
 
 
+<link rel="stylesheet" href="{% static 'invoices_app/css/journal_form.css' %}">
 
 
 {% endblock %}

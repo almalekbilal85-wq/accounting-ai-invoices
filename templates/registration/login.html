@@ -1,28 +1,84 @@
 {% extends "invoices_app/base.html" %}
+
+
+{% load static %}
+
+
 {% block body_block %}
+<div class="container">
 
-{% if form.errors %}
-<p>Your username and password didn't match. Please try again.</p>
-{% endif %}
+    <div class="row justify-content-center align-items-center min-vh-100">
 
-<form method="post" action="{% url 'login' %}">
+        <div class="col-md-5 col-lg-4">
 
-    {% csrf_token %}
-    <table>
-    <tr>
-        <td>{{ form.username.label_tag }}</td>
-        <td>{{ form.username }}</td>
-    </tr>
-    <tr>
-        <td>{{ form.password.label_tag }}</td>
-        <td>{{ form.password }}</td>
-    </tr>
-    </table>
+            <div class="card login-card">
 
-    <input type="submit" value="login">
-    <input type="hidden" name="next" value="{{ next }}">
+                <div class="card-body p-5">
+
+                    <div class="login-logo">
+                        📘
+                    </div>
+
+                    <div class="text-center mb-4">
+
+                        <h1 class="login-title">
+                            Sign In
+                        </h1>
+
+                        <p class="login-subtitle">
+                            Access your accounting workspace
+                        </p>
+
+                    </div>
+
+                    {% if form.errors %}
+                        <div class="alert login-alert mb-4">
+                            Invalid username or password.
+                        </div>
+                    {% endif %}
+
+                    <form method="post">
+
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Username
+                            </label>
+
+                            {{ form.username }}
+
+                        </div>
+
+                        <div class="mb-4">
+
+                            <label class="form-label">
+                                Password
+                            </label>
+
+                            {{ form.password }}
+
+                        </div>
+
+                        <button
+                            type="submit"
+                            class="btn btn-login w-100">
+                            Sign In
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
 
-</form>
-
+<link rel="stylesheet" href="{% static 'invoices_app/css/login.css' %}">
 {% endblock %}

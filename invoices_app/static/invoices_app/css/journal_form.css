@@ -1,0 +1,43 @@
+
+
+.workspace-card {
+    border: 0;
+    border-radius: 1rem;
+    box-shadow: 0 .125rem .75rem rgba(0,0,0,.08);
+}
+
+.section-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-control,
+.form-select {
+    border-radius: 12px;
+}
+
+.table th {
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.preview-container {
+    background: #f8f9fa;
+    border-radius: 16px;
+    padding: 1rem;
+    border: 1px solid #e9ecef;
+}
+
+.sticky-sidebar {
+    position: sticky;
+    top: 20px;
+}
+
+.page-header {
+    margin-bottom: 1.5rem;
+}
+
