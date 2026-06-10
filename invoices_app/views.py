@@ -6,7 +6,8 @@ import json
 from django.views.generic import View, ListView, DetailView, CreateView, DeleteView, UpdateView
 from invoices_app import models
 from django.urls import reverse_lazy
-
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -43,7 +44,7 @@ def upload(request):
     return render (request, 'invoices_app/upload_invoices.html', {'form':form, 'text': file_uploaded, 'data': data})
 
 
-
+@login_required
 def create_journal(request, customer_id):
     customer = models.Customer.objects.get(id=customer_id)
 
@@ -82,7 +83,7 @@ def create_journal(request, customer_id):
         "customer": customer,
     })
 
-
+@login_required
 def edit_journal(request, journal_id):
     journal = get_object_or_404(models.Journal, id=journal_id)
     customer = journal.customer
@@ -154,31 +155,52 @@ def edit_journal(request, journal_id):
 
 ##########################################
 
-class CustomerListView(ListView):
+class CustomerListView(LoginRequiredMixin,ListView):
+    login_url = 'login'
+    redirect_field_name = '/'
+
     model = models.Customer
 
-class CustomerDetailView(DetailView):
+class CustomerDetailView(LoginRequiredMixin, DetailView):
+    login_url = 'login'
+    redirect_field_name = '/'
+
     model = models.Customer
     template_name = 'invoices_app/customer_detail.html'
 
-class CustomerCreateView(CreateView):
+class CustomerCreateView(LoginRequiredMixin, CreateView):
+    login_url = 'login'
+    redirect_field_name = '/'
+
     fields = ('name', 'org_number', 'address')
     model = models.Customer
 
-class CustomerUpdateView(UpdateView):
+class CustomerUpdateView(LoginRequiredMixin, UpdateView):
+    login_url = 'login'
+    redirect_field_name = '/'
+
     fields = ('name', 'org_number', 'address')
     model = models.Customer
 
-class CustomerDeleteView(DeleteView):
+class CustomerDeleteView(LoginRequiredMixin, DeleteView):
+    login_url = 'login'
+    redirect_field_name = '/'
+
     model = models.Customer
     success_url = reverse_lazy('invoices_app:customers_list')
 
 
-class JournalDetailView(DetailView):
+class JournalDetailView(LoginRequiredMixin, DetailView):
+    login_url = 'login'
+    redirect_field_name = '/'
+
     model = models.Journal
     template_name = 'invoices_app/journal_detail.html'
 
-class JournalDeleteView(DeleteView):
+class JournalDeleteView(LoginRequiredMixin, DeleteView):
+    login_url = 'login'
+    redirect_field_name = '/'
+    
     model = models.Journal
     success_url = reverse_lazy('invoices_app:customers_list')
 ###########################
@@ -186,6 +208,7 @@ class JournalDeleteView(DeleteView):
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
+@login_required
 @csrf_exempt
 def ai_journal_extract(request):
 

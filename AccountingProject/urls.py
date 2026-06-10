@@ -20,13 +20,15 @@ from django.urls import path,include
 from invoices_app import views
 from django.conf import settings
 from django.conf.urls.static import static
-
+from django.contrib.auth import views as auth_views
 
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('', views.index, name='index'),
-    path('invoices_app/', include('invoices_app.urls'))
+    path('invoices_app/', include('invoices_app.urls')),
+    path("accounts/login/", auth_views.LoginView.as_view(next_page='/'), name='login'),
+    path("accounts/logout/", auth_views.LogoutView.as_view(next_page='/'), name='logout'),
 ]
 
 

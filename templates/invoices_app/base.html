@@ -64,21 +64,47 @@
             <!-- Right Side -->
             <div class="ms-auto d-flex align-items-center gap-3">
 
-                <!-- Quick Action -->
+               
+
+                <!-- Admin -->
+           {% if user.is_authenticated %}
+
+
+                 <!-- Quick Action -->
                 <a href="{% url 'invoices_app:customers_list' %}"
                    class="btn btn-success rounded-pill px-4">
 
                     Kunder
 
                 </a>
-
-                <!-- Admin -->
+                
                 <a href="{% url 'admin:index' %}"
-                   class="btn btn-outline-light rounded-pill px-4">
-
+                class="btn btn-outline-light rounded-pill px-4">
                     Admin
-
                 </a>
+
+                <form method="post"
+                    action="{% url 'logout' %}"
+                    class="d-inline">
+
+                    {% csrf_token %}
+
+                    <button type="submit"
+                            class="btn btn-outline-danger rounded-pill px-4">
+                        Logout
+                    </button>
+
+                </form>
+
+            {% else %}
+
+                <a href="{% url 'login' %}"
+                class="btn btn-outline-light rounded-pill px-4">
+                    Login
+                </a>
+
+            {% endif %}
+
 
             </div>
 
@@ -87,6 +113,8 @@
     </div>
 
 </nav>
+
+
 
 <div class="container">
   {% block body_block %}

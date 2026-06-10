@@ -45,6 +45,8 @@
                     <!-- Buttons -->
                     <div class="d-flex flex-wrap gap-3">
 
+                        {% if user.is_authenticated %}
+
                         <a href="{% url 'invoices_app:upload' %}"
                            class="btn btn-success btn-lg rounded-pill px-5 py-3 shadow">
 
@@ -58,6 +60,8 @@
                             👥 Kunder
 
                         </a>
+
+                        {% endif %}
 
                     </div>
 
@@ -205,6 +209,8 @@
                     <!-- Bottom CTA -->
                     <div class="mt-5">
 
+                        {% if user.is_authenticated %}
+
                         <a href="{% url 'invoices_app:customers_list' %}"
                            class="btn btn-dark w-100 rounded-pill py-3">
 
@@ -212,6 +218,7 @@
 
                         </a>
 
+                        {% endif %}
                     </div>
 
                 </div>
