@@ -83,3 +83,11 @@ class AccountingLine(models.Model):
 
     def __str__(self):
         return self.account_number
+    
+class Account(models.Model):
+    account_number = models.CharField(max_length=10, unique=True)
+    description = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f"{self.account_number} - {self.description}"
+    
