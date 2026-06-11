@@ -77,6 +77,7 @@ class Invoice(models.Model):
 class AccountingLine(models.Model):
     journal = models.ForeignKey(Journal, related_name='accounting_lines',  on_delete=models.CASCADE)
     account_number = models.CharField(max_length=10)
+    description = models.CharField(max_length=255)
     debit = models.DecimalField(max_digits=12, decimal_places=2)
     credit = models.DecimalField(max_digits=12, decimal_places=2)
     

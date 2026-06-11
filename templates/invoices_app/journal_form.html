@@ -192,7 +192,11 @@
 
                                     <tr>
                                         <th style="width:35%;">
-                                            Account
+                                            Kontonummer
+                                        </th>
+
+                                        <th style="width:35%;">
+                                            Beskrivning
                                         </th>
 
                                         <th style="width:25%;">
@@ -222,6 +226,16 @@
                                                 {% if form.account_number.errors %}
                                                     <div class="text-danger small mt-1">
                                                         {{ form.account_number.errors }}
+                                                    </div>
+                                                {% endif %}
+                                            </td>
+
+                                            <td>
+                                                {{ form.description }}
+
+                                                {% if form.description.errors %}
+                                                    <div class="text-danger small mt-1">
+                                                        {{ form.description.errors }}
                                                     </div>
                                                 {% endif %}
                                             </td>
@@ -379,6 +393,9 @@
 
 <script>
     const AI_URL = "{% url 'invoices_app:ai_extract_invoice' %}";
+    const ACCOUNT_LOOKUP_URL = "{% url 'invoices_app:account_lookup' %}"
+    
+
 </script>
 
 

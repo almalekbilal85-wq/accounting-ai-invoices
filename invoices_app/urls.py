@@ -16,4 +16,5 @@ urlpatterns = [
     path('journals/<int:pk>/',views.JournalDetailView.as_view(),name='journal_detail'),
     path('journals/delete/<int:pk>/', views.JournalDeleteView.as_view(),name='delete_journal'),
     path('journals/edit/<int:journal_id>/', views.edit_journal,name='edit_journal'),
+    path("api/account-lookup/",views.account_lookup,name="account_lookup"),
 ]

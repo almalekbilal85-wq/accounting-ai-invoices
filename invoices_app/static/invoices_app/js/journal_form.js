@@ -1,4 +1,6 @@
 
+console.log("JS FILE LOADED");
+
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -114,6 +116,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const data = await response.json();
 
             console.log("AI Response:", data);
+            
 
             // Autofill JOURNAL FORM
 
@@ -156,6 +159,10 @@ document.addEventListener("DOMContentLoaded", function () {
                         `id_accounting_lines-${index}-account_number`
                     );
 
+                    const descriptionField = document.getElementById(
+                        `id_accounting_lines-${index}-description`
+                    );            
+
                     const debitField = document.getElementById(
                         `id_accounting_lines-${index}-debit`
                     );
@@ -175,6 +182,12 @@ document.addEventListener("DOMContentLoaded", function () {
                     if (creditField) {
                         creditField.value = line.credit;
                     }
+
+                    if (descriptionField) {
+                        descriptionField.value = line.description;
+                    }
+
+                    
 
                 });
 
@@ -243,6 +256,70 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (e.target === lastInput) {
             addRow();
+        }
+
+    });
+
+});
+
+
+// Account number description API fetching code
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    async function lookupAccount(params) {
+
+        const query = new URLSearchParams(params);
+
+        const response = await fetch(
+            `${ACCOUNT_LOOKUP_URL}?${query.toString()}`
+        );
+
+        if (!response.ok) {
+            return null;
+        }
+
+        return await response.json();
+    }
+
+    document.addEventListener("change", async function (event) {
+
+        const row = event.target.closest("tr");
+
+        if (!row) return;
+
+        const accountNumberInput =
+            row.querySelector(".account-number-field");
+
+        const descriptionInput =
+            row.querySelector(".account-description-field");
+
+        // Account number changed
+        if (event.target.classList.contains("account-number-field")) {
+
+            if (!accountNumberInput.value.trim()) return;
+
+            const data = await lookupAccount({
+                account_number: accountNumberInput.value.trim()
+            });
+
+            if (data) {
+                descriptionInput.value = data.description;
+            }
+        }
+
+        // Description changed
+        if (event.target.classList.contains("account-description-field")) {
+
+            if (!descriptionInput.value.trim()) return;
+
+            const data = await lookupAccount({
+                description: descriptionInput.value.trim()
+            });
+
+            if (data) {
+                accountNumberInput.value = data.account_number;
+            }
         }
 
     });

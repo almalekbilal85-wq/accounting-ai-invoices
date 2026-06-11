@@ -208,6 +208,28 @@ class JournalDeleteView(LoginRequiredMixin, DeleteView):
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
+
+
+def attach_account_descriptions(ai_result: dict) -> dict:
+    """
+    Takes AI JSON result and adds account descriptions
+    to each accounting entry.
+    """
+
+    entries = ai_result.get("accounting_entries", [])
+
+    for entry in entries:
+        account_number = entry.get("account")
+
+        if account_number:
+            try:
+                account = models.Account.objects.get(account_number=account_number)
+                entry["description"] = account.description
+            except models.Account.DoesNotExist:
+                entry["description"] = None
+
+    return ai_result
+
 @login_required
 @csrf_exempt
 def ai_journal_extract(request):
@@ -223,6 +245,47 @@ def ai_journal_extract(request):
 
         result = json.loads(getAIOutput(uploaded_file, extension))
 
+        result = attach_account_descriptions(result)
+
         return JsonResponse(result)
 
     return JsonResponse({"error": "Invalid request"}, status=400)
+
+
+
+@login_required
+def account_lookup(request):
+    """
+    Examples:
+
+    /api/account-lookup/?account_number=1900
+
+    /api/account-lookup/?description=Kassa
+    """
+
+    account_number = request.GET.get("account_number")
+    description = request.GET.get("description")
+
+    try:
+        if account_number:
+            account = models.Account.objects.get(account_number=account_number)
+
+        elif description:
+            account = models.Account.objects.get(description__iexact=description)
+
+        else:
+            return JsonResponse(
+                {"error": "account_number or description is required"},
+                status=400
+            )
+
+        return JsonResponse({
+            "account_number": account.account_number,
+            "description": account.description,
+        })
+
+    except models.Account.DoesNotExist:
+        return JsonResponse(
+            {"error": "Account not found"},
+            status=404
+        )

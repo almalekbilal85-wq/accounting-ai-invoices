@@ -10,7 +10,16 @@ class JournalForm(forms.ModelForm):
 class AccountingLineForm(forms.ModelForm):
     class Meta:
         model = AccountingLine
-        fields = ["account_number", "debit", "credit"]
+        fields = ["account_number", "description" , "debit", "credit"]
+
+        widgets = {
+            "account_number": forms.TextInput(
+                attrs={"class": "account-number-field"}
+            ),
+            "description": forms.TextInput(
+                attrs={"class": "account-description-field"}
+            ),
+        }       
 
 AccountingLineFormSet = inlineformset_factory(
     Journal,
