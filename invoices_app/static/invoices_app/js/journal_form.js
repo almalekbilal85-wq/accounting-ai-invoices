@@ -192,6 +192,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
 
             }
+            updateBalanceTotals()
 
         } catch (error) {
             console.error("AI extraction failed:", error);
@@ -323,5 +324,77 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
     });
+
+});
+
+
+// Balanced feature under the table
+function updateBalanceTotals() {
+
+    let debitTotal = 0;
+    let creditTotal = 0;
+
+    document.querySelectorAll(".debit-field")
+        .forEach(field => {
+            debitTotal += parseFloat(field.value) || 0;
+        });
+
+    document.querySelectorAll(".credit-field")
+        .forEach(field => {
+            creditTotal += parseFloat(field.value) || 0;
+        });
+
+    document.getElementById("debit-total")
+        .textContent = debitTotal.toFixed(2);
+
+    document.getElementById("credit-total")
+        .textContent = creditTotal.toFixed(2);
+
+    const status = document.getElementById("balance-status");
+    const saveButton = document.getElementById("save-journal-btn");
+
+    const isBalanced =
+        Math.abs(debitTotal - creditTotal) < 0.01;
+
+    if (isBalanced) {
+
+        status.classList.remove("alert-danger");
+        status.classList.add("alert-success");
+
+        status.textContent =
+            `✓ Balanserad (${debitTotal.toFixed(2)})`;
+
+        saveButton.disabled = false;
+
+    } else {
+
+        status.classList.remove("alert-success");
+        status.classList.add("alert-danger");
+
+        status.textContent =
+            `✗ Differens: ${(debitTotal - creditTotal).toFixed(2)}`;
+
+        saveButton.disabled = true;
+
+    }
+}
+
+document.addEventListener("input", function(event) {
+
+    if (
+        event.target.classList.contains("debit-field") ||
+        event.target.classList.contains("credit-field")
+    ) {
+
+        updateBalanceTotals();
+
+    }
+
+});
+
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    updateBalanceTotals();
 
 });

@@ -43,6 +43,24 @@ def upload(request):
             
     return render (request, 'invoices_app/upload_invoices.html', {'form':form, 'text': file_uploaded, 'data': data})
 
+from decimal import Decimal
+
+def is_balanced(formset):
+    debit_total = Decimal("0")
+    credit_total = Decimal("0")
+
+    for form in formset:
+        if not form.cleaned_data:
+            continue
+
+        if form.cleaned_data.get("DELETE"):
+            continue
+
+        debit_total += form.cleaned_data.get("debit") or Decimal("0")
+        credit_total += form.cleaned_data.get("credit") or Decimal("0")
+
+    return debit_total == credit_total
+
 
 @login_required
 def create_journal(request, customer_id):
@@ -56,20 +74,26 @@ def create_journal(request, customer_id):
 
         if journal_form.is_valid() and formset.is_valid():
 
-            journal = journal_form.save(commit=False)
-            journal.customer = customer
-            journal.save()
+            if not is_balanced(formset):  
+                journal_form.add_error(
+                    None,
+                    "Verifikationen är inte balanserad."
+                )
+            else:
+                journal = journal_form.save(commit=False)
+                journal.customer = customer
+                journal.save()
 
-            formset.instance = journal
-            formset.save()
+                formset.instance = journal
+                formset.save()
 
-            # ONLY SAVE INVOICE IF TYPE IS INVOICE
-            if journal.type == "invoice" and invoice_form.is_valid():
-                invoice = invoice_form.save(commit=False)
-                invoice.journal = journal
-                invoice.save()
+                # ONLY SAVE INVOICE IF TYPE IS INVOICE
+                if journal.type == "invoice" and invoice_form.is_valid():
+                    invoice = invoice_form.save(commit=False)
+                    invoice.journal = journal
+                    invoice.save()
 
-            return redirect("invoices_app:customer_detail", pk=customer.id)
+                return redirect("invoices_app:customer_detail", pk=customer.id)
 
     else:
         journal_form = JournalForm()
@@ -82,6 +106,7 @@ def create_journal(request, customer_id):
         "invoice_form": invoice_form,
         "customer": customer,
     })
+
 
 @login_required
 def edit_journal(request, journal_id):
@@ -110,25 +135,32 @@ def edit_journal(request, journal_id):
 
         if journal_form.is_valid() and formset.is_valid():
 
-            journal = journal_form.save()
+            if not is_balanced(formset):
+                journal_form.add_error(
+                    None,
+                    "Verifikationen är inte balanserad."
+                )
+            
+            else:
+                journal = journal_form.save()
 
-            formset.instance = journal
-            formset.save()
+                formset.instance = journal
+                formset.save()
 
-            # Invoice handling
-            if journal.type == "invoice" and invoice_form.is_valid():
-                invoice = invoice_form.save(commit=False)
-                invoice.journal = journal
-                invoice.save()
+                # Invoice handling
+                if journal.type == "invoice" and invoice_form.is_valid():
+                    invoice = invoice_form.save(commit=False)
+                    invoice.journal = journal
+                    invoice.save()
 
-            # Optional: delete invoice if type changed away from invoice
-            elif journal.type != "invoice":
-                journal.invoices.all().delete()
+                # Optional: delete invoice if type changed away from invoice
+                elif journal.type != "invoice":
+                    journal.invoices.all().delete()
 
-            return redirect(
-                "invoices_app:customer_detail",
-                pk=customer.id
-            )
+                return redirect(
+                    "invoices_app:customer_detail",
+                    pk=customer.id
+                )
 
     else:
         journal_form = JournalForm(instance=journal)
@@ -203,6 +235,7 @@ class JournalDeleteView(LoginRequiredMixin, DeleteView):
     
     model = models.Journal
     success_url = reverse_lazy('invoices_app:customers_list')
+    
 ###########################
 
 from django.http import JsonResponse

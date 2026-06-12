@@ -199,11 +199,11 @@
                                             Beskrivning
                                         </th>
 
-                                        <th style="width:25%;">
+                                        <th style="width:15%;">
                                             Debit
                                         </th>
 
-                                        <th style="width:25%;">
+                                        <th style="width:15%;">
                                             Credit
                                         </th>
                                     </tr>
@@ -265,6 +265,33 @@
                                     {% endfor %}
 
                                 </tbody>
+
+                                <tfoot>
+                                    <tr class="table-light fw-bold">
+                                        <td colspan="2" class="text-end">
+                                            Totalt:
+                                        </td>
+
+                                        <td id="debit-total">
+                                            0.00
+                                        </td>
+
+                                        <td id="credit-total">
+                                            0.00
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td colspan="4">
+                                            <div id="balance-status"
+                                                class="alert alert-danger mb-0">
+
+                                                Obalanserad verifikation
+
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tfoot>
 
                             </table>
 
@@ -338,7 +365,8 @@
                                     </a>
 
                                     <button type="submit"
-                                            class="btn btn-success px-5">
+                                            class="btn btn-success px-5"
+                                            id="save-journal-btn">
                                         Save Journal
                                     </button>
 

@@ -41,3 +41,7 @@
     margin-bottom: 1.5rem;
 }
 
+#save-journal-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
