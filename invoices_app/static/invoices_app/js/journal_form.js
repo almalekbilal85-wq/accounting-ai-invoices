@@ -1,5 +1,4 @@
 
-console.log("JS FILE LOADED");
 
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -232,12 +231,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 input.id = input.id.replace(/-\d+-/, `-${formIdx}-`);
             }
 
-            if (input.type !== "checkbox") {
-                input.value = "";
-            }
-
             if (input.type === "checkbox") {
                 input.checked = false;
+            }
+            else if (
+                input.classList.contains("debit-field") ||
+                input.classList.contains("credit-field")
+            ) {
+                input.value = "0";
+            }
+            else {
+                input.value = "";
             }
 
         });
@@ -257,6 +261,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (e.target === lastInput) {
             addRow();
+            
         }
 
     });

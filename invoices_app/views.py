@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import UploadFileForm, JournalForm, AccountingLineForm, InvoiceForm, AccountingLineFormSet
+from .forms import UploadFileForm, JournalForm, AccountingLineForm, InvoiceForm, AccountingLineFormSet, EditAccountingLineFormSet
 from File_processing.api_connection import getAIOutput
 import json
 
@@ -122,7 +122,7 @@ def edit_journal(request, journal_id):
             instance=journal
         )
 
-        formset = AccountingLineFormSet(
+        formset = EditAccountingLineFormSet(
             request.POST,
             instance=journal
         )
@@ -165,7 +165,7 @@ def edit_journal(request, journal_id):
     else:
         journal_form = JournalForm(instance=journal)
 
-        formset = AccountingLineFormSet(
+        formset = EditAccountingLineFormSet(
             instance=journal
         )
 

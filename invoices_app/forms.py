@@ -29,6 +29,15 @@ class AccountingLineForm(forms.ModelForm):
                                                "class": "form-control credit-field"}),
         }       
 
+
+EditAccountingLineFormSet = inlineformset_factory(
+    Journal,
+    AccountingLine,
+    form=AccountingLineForm,
+    extra=0,
+    can_delete=True
+)
+
 AccountingLineFormSet = inlineformset_factory(
     Journal,
     AccountingLine,
