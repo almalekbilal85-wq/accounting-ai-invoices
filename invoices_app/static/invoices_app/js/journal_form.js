@@ -398,3 +398,54 @@ document.addEventListener("DOMContentLoaded", function () {
     updateBalanceTotals();
 
 });
+
+
+
+// Skipping empty rows in the bookkeeping table
+document.addEventListener("DOMContentLoaded", function () {
+
+    const saveButton = document.getElementById("save-journal-btn");
+
+    saveButton.onclick = function () {
+
+        document.querySelectorAll("tbody tr").forEach(row => {
+
+        
+        const accountField = row.querySelector(".account-number-field");
+        const descriptionField = row.querySelector(".account-description-field");
+        const debitField = row.querySelector(".debit-field");
+        const creditField = row.querySelector(".credit-field");
+
+        if (!accountField || !debitField || !creditField) {
+            return;
+        }
+
+        const account = accountField.value.trim();
+        const description = descriptionField
+            ? descriptionField.value.trim()
+            : "";
+
+        const debit = parseFloat(debitField.value) || 0;
+        const credit = parseFloat(creditField.value) || 0;
+
+        const isEmpty =
+            account === "" &&
+            description === "" &&
+            debit === 0 &&
+            credit === 0;
+
+        if (isEmpty) {
+
+            // Prevent Django from receiving these fields
+            row.querySelectorAll("input, select, textarea")
+                .forEach(field => {
+                    field.disabled = true;
+                });
+
+        }
+
+    });
+
+    };
+
+});
