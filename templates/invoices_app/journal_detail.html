@@ -141,7 +141,8 @@
 
                             <thead class="table-light">
                                 <tr>
-                                    <th>Account</th>
+                                    <th>Kontonummer</th>
+                                    <th>Beskrivning</th>
                                     <th class="text-end">Debit</th>
                                     <th class="text-end">Credit</th>
                                 </tr>
@@ -153,6 +154,7 @@
 
                                 <tr>
                                     <td class="fw-semibold">{{ line.account_number }}</td>
+                                    <td class="fw-semibold">{{ line.description }}</td>
                                     <td class="text-end">{{ line.debit }}</td>
                                     <td class="text-end">{{ line.credit }}</td>
                                 </tr>
@@ -181,6 +183,7 @@
 
             {% for invoice in journal.invoices.all %}
 
+            {% if invoice.file %}
             <div class="card border-0 shadow-lg rounded-4">
 
                 <div class="card-body p-0">
@@ -192,7 +195,7 @@
                         </a>
                     </div>
 
-                    {% if invoice.file %}
+                    
 
                     <!-- IMAGE (FULL WIDTH, BIG) -->
                     <img
